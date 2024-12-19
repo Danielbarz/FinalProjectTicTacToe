@@ -114,8 +114,4 @@ public class TicTacToeVs extends JFrame {
         // Kembali ke layar awal
         new ScreenAwal();
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(TicTacToeVs::new);
-    }
 }

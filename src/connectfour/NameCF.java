@@ -102,7 +102,7 @@ public class NameCF extends JFrame {
     private void backisclicked() {
         // Menutup layar ini dan kembali ke layar sebelumnya
         setVisible(false);
-        new Connect4Vs(); // Ganti dengan layar sebelumnya
+        new ScreenAwal(); // Ganti dengan layar sebelumnya
     }
 
     private void startGameClicked() {
@@ -122,10 +122,6 @@ public class NameCF extends JFrame {
         setVisible(false);
 
         // Panggil layar permainan di sini
-        // new GameScreen(player1Name, player2Name);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(NameCF::new);
+        ConnectFour.play(player1Name, player2Name);
     }
 }

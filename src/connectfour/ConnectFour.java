@@ -27,10 +27,9 @@ public class ConnectFour extends JPanel {
     private String playerOName;  // Name of Player O (Yellow)
 
     /** Constructor to setup the UI and game components */
-    public ConnectFour() {
+    public ConnectFour(String playerXName, String playerOName) {
         this.playerXName = playerXName;
         this.playerOName = playerOName;
-
         setLayout(new BorderLayout());
 
         // Right-side status panel
@@ -192,14 +191,14 @@ public class ConnectFour extends JPanel {
     }
 
     /** The entry "main" method */
-    public static void play() {
+    public static void play(String playerXName, String playerOName) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Connect Four");
-            frame.setContentPane(new ConnectFour());
+            frame.setContentPane(new ConnectFour(playerXName, playerOName));
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.pack();
-            frame.setLocationRelativeTo(null); // Center the application window
-            frame.setVisible(true); // Show it
+            frame.setSize(900, 600);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
         });
     }
 }

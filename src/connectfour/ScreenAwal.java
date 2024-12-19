@@ -99,10 +99,7 @@ public class ScreenAwal extends JFrame {
         setVisible(false);
 
         // Memulai permainan dengan nama pemain
-        new Connect4Vs();
+        new NameCF();
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(ScreenAwal::new);
-    }
 }

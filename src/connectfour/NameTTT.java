@@ -125,7 +125,4 @@ public class NameTTT extends JFrame {
         // new GameScreen(player1Name, player2Name);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(NameCF::new);
-    }
 }
