@@ -1,6 +1,7 @@
 package connectfour;
 
 import java.awt.*;
+
 /**
  * The Board class models the ROWS-by-COLS game board.
  */
@@ -47,6 +48,50 @@ public class Board {
     }
 
     /**
+     * Check for a winning condition (4 in a row, column, or diagonal).
+     */
+    private boolean hasWon(Seed player, int selectedRow, int selectedCol) {
+        // Check horizontal
+        int count = 0;
+        for (int col = 0; col < COLS; ++col) {
+            count = (cells[selectedRow][col].content == player) ? count + 1 : 0;
+            if (count == 4) return true;
+        }
+
+        // Check vertical
+        count = 0;
+        for (int row = 0; row < ROWS; ++row) {
+            count = (cells[row][selectedCol].content == player) ? count + 1 : 0;
+            if (count == 4) return true;
+        }
+
+        // Check diagonal (top-left to bottom-right)
+        count = 0;
+        int startRow = Math.max(0, selectedRow - selectedCol);
+        int startCol = Math.max(0, selectedCol - selectedRow);
+        while (startRow < ROWS && startCol < COLS) {
+            count = (cells[startRow][startCol].content == player) ? count + 1 : 0;
+            if (count == 4) return true;
+            startRow++;
+            startCol++;
+        }
+
+        // Check anti-diagonal (bottom-left to top-right)
+        count = 0;
+        int diff = selectedRow + selectedCol;
+        startRow = Math.min(ROWS - 1, diff);
+        startCol = diff - startRow;
+        while (startRow >= 0 && startCol < COLS) {
+            count = (cells[startRow][startCol].content == player) ? count + 1 : 0;
+            if (count == 4) return true;
+            startRow--;
+            startCol++;
+        }
+
+        return false;
+    }
+
+    /**
      *  The given player makes a move on (selectedRow, selectedCol).
      *  Update cells[selectedRow][selectedCol]. Compute and return the
      *  new game state (PLAYING, DRAW, CROSS_WON, NOUGHT_WON).
@@ -56,23 +101,10 @@ public class Board {
         cells[selectedRow][selectedCol].content = player;
 
         // Compute and return the new game state
-        if (cells[selectedRow][0].content == player  // 3-in-the-row
-                && cells[selectedRow][1].content == player
-                && cells[selectedRow][2].content == player
-                || cells[0][selectedCol].content == player // 3-in-the-column
-                && cells[1][selectedCol].content == player
-                && cells[2][selectedCol].content == player
-                || selectedRow == selectedCol     // 3-in-the-diagonal
-                && cells[0][0].content == player
-                && cells[1][1].content == player
-                && cells[2][2].content == player
-                || selectedRow + selectedCol == 2 // 3-in-the-opposite-diagonal
-                && cells[0][2].content == player
-                && cells[1][1].content == player
-                && cells[2][0].content == player) {
+        if (hasWon(player, selectedRow, selectedCol)) {
             return (player == Seed.CROSS) ? State.CROSS_WON : State.NOUGHT_WON;
         } else {
-            // Nobody win. Check for DRAW (all cells occupied) or PLAYING.
+            // Nobody wins. Check for DRAW (all cells occupied) or PLAYING.
             for (int row = 0; row < ROWS; ++row) {
                 for (int col = 0; col < COLS; ++col) {
                     if (cells[row][col].content == Seed.NO_SEED) {
