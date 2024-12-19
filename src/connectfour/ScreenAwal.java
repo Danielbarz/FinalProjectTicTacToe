@@ -7,7 +7,7 @@ import java.awt.event.*;
 public class ScreenAwal extends JFrame {
     private JButton tictactoe;
     private JButton connectfour;
-    private JTextField playerXNameField, playerONameField;
+
     private JLayeredPane layeredPane;
 
     public ScreenAwal() {
@@ -34,11 +34,7 @@ public class ScreenAwal extends JFrame {
         layeredPane.setLayout(new BorderLayout());
         layeredPane.setPreferredSize(new Dimension(900, 600));
 
-        playerXNameField = new JTextField(20);  // Field untuk input nama Pemain X
-        playerXNameField.setFont(new Font("Arial", Font.PLAIN, 16));
 
-        playerONameField = new JTextField(20);  // Field untuk input nama Pemain O
-        playerONameField.setFont(new Font("Arial", Font.PLAIN, 16));
 
         // Membuat tombol tictactoe
         tictactoe = new JButton("");
@@ -55,8 +51,8 @@ public class ScreenAwal extends JFrame {
         connectfour.setPreferredSize(new Dimension(160, 80));
 
         // Menambahkan action listener untuk memulai permainan
-        tictactoe.addActionListener(e -> startGameClicked());
-        connectfour.addActionListener(e -> startGameClicked());
+        tictactoe.addActionListener(e -> tictactoeclicked());
+        connectfour.addActionListener(e -> connect4clicked());
 
         // Membuat panel kontrol untuk input nama dan tombol start game
         JPanel controlsPanel = new JPanel();
@@ -86,20 +82,24 @@ public class ScreenAwal extends JFrame {
         setVisible(true);
     }
 
-    private void startGameClicked() {
-        // Mengambil nama pemain X dan O dari input field
-        String playerXName = playerXNameField.getText().trim();
-        String playerOName = playerONameField.getText().trim();
+    private void tictactoeclicked() {
 
-
-        // Hentikan musik latar
-        Song.stopPlayback();
 
         // Menyembunyikan layar awal
         setVisible(false);
 
         // Memulai permainan dengan nama pemain
-        ConnectFour.play(playerXName, playerOName);
+        new TicTacToeVs();
+    }
+    private void connect4clicked() {
+        // Mengambil nama pemain X dan O dari input field
+
+
+        // Menyembunyikan layar awal
+        setVisible(false);
+
+        // Memulai permainan dengan nama pemain
+        new Connect4Vs();
     }
 
     public static void main(String[] args) {
