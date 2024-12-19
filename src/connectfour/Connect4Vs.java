@@ -104,7 +104,7 @@ public class Connect4Vs extends JFrame {
         setVisible(false);
 
         // Memulai permainan 2 Players
-        System.out.println("Tic Tac Toe (2 Players) game started!");
+        new NameCF();
     }
 
     private void backisclicked() {
