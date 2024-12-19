@@ -5,8 +5,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class ScreenAwal extends JFrame {
-    private JButton startGame;
-    private JTextField playerXNameField, playerONameField;
+    private JButton tictactoe;
+    private JButton connectfour;
+
     private JLayeredPane layeredPane;
 
     public ScreenAwal() {
@@ -21,7 +22,7 @@ public class ScreenAwal extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
-                ImageIcon icon = new ImageIcon(getClass().getResource("/image/CONNECTFOUR.gif"));
+                ImageIcon icon = new ImageIcon(getClass().getResource("/image/HOME.gif"));
                 Image img = icon.getImage();
 
                 int width = getWidth();  // Menyesuaikan dengan ukuran window
@@ -33,58 +34,42 @@ public class ScreenAwal extends JFrame {
         layeredPane.setLayout(new BorderLayout());
         layeredPane.setPreferredSize(new Dimension(900, 600));
 
-        // Membuat label dan input untuk nama pemain X dan O
-        JLabel nameLabelX = new JLabel("Masukkan Nama Pemain X:");
-        nameLabelX.setFont(new Font("Arial", Font.BOLD, 16));
-        nameLabelX.setForeground(Color.WHITE);
 
-        JLabel nameLabelO = new JLabel("Masukkan Nama Pemain O:");
-        nameLabelO.setFont(new Font("Arial", Font.BOLD, 16));
-        nameLabelO.setForeground(Color.WHITE);
 
-        playerXNameField = new JTextField(20);  // Field untuk input nama Pemain X
-        playerXNameField.setFont(new Font("Arial", Font.PLAIN, 16));
+        // Membuat tombol tictactoe
+        tictactoe = new JButton("");
+        tictactoe.setContentAreaFilled(false);
+        tictactoe.setFocusPainted(false);
+        tictactoe.setBorderPainted(false);
+        tictactoe.setPreferredSize(new Dimension(155, 80));
 
-        playerONameField = new JTextField(20);  // Field untuk input nama Pemain O
-        playerONameField.setFont(new Font("Arial", Font.PLAIN, 16));
-
-        // Membuat tombol "Start Game"
-        startGame = new JButton("Start Game");
-        startGame.setFont(new Font("Arial", Font.BOLD, 20));
-        startGame.setForeground(Color.WHITE);
-        startGame.setBackground(Color.RED);
-        startGame.setFocusPainted(false);
-        startGame.setPreferredSize(new Dimension(200, 50));
+        // Membuat tombol connectfour
+        connectfour = new JButton("");
+        connectfour.setContentAreaFilled(false);
+        connectfour.setFocusPainted(false);
+        connectfour.setBorderPainted(false);
+        connectfour.setPreferredSize(new Dimension(160, 80));
 
         // Menambahkan action listener untuk memulai permainan
-        startGame.addActionListener(e -> startGameClicked());
+        tictactoe.addActionListener(e -> tictactoeclicked());
+        connectfour.addActionListener(e -> connect4clicked());
 
         // Membuat panel kontrol untuk input nama dan tombol start game
         JPanel controlsPanel = new JPanel();
         controlsPanel.setOpaque(false);
         controlsPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);  // Memberikan lebih banyak jarak antar elemen
-        gbc.anchor = GridBagConstraints.CENTER;
 
-        // Menambahkan label dan text field ke panel
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        controlsPanel.add(nameLabelX, gbc);
 
-        gbc.gridy = 1;
-        controlsPanel.add(playerXNameField, gbc);
-
-        gbc.gridy = 2;
-        controlsPanel.add(nameLabelO, gbc);
-
-        gbc.gridy = 3;
-        controlsPanel.add(playerONameField, gbc);
 
         // Menambah jarak untuk tombol start
         gbc.gridy = 4;
-        gbc.insets = new Insets(30, 10, 10, 10);
-        controlsPanel.add(startGame, gbc);
+        gbc.insets = new Insets(75, 0, 0, 25);
+        controlsPanel.add(tictactoe, gbc);
+
+        gbc.gridy = 4;
+        gbc.insets = new Insets(75, 10, 0, 0);
+        controlsPanel.add(connectfour, gbc);
 
         // Menambahkan panel kontrol ke layered pane
         layeredPane.add(controlsPanel, BorderLayout.CENTER);
@@ -97,25 +82,24 @@ public class ScreenAwal extends JFrame {
         setVisible(true);
     }
 
-    private void startGameClicked() {
-        // Mengambil nama pemain X dan O dari input field
-        String playerXName = playerXNameField.getText().trim();
-        String playerOName = playerONameField.getText().trim();
+    private void tictactoeclicked() {
 
-        // Mengecek apakah nama pemain X dan O tidak kosong
-        if (playerXName.isEmpty() || playerOName.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nama Pemain X dan O tidak boleh kosong!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Hentikan musik latar
-        Song.stopPlayback();
 
         // Menyembunyikan layar awal
         setVisible(false);
 
         // Memulai permainan dengan nama pemain
-        ConnectFour.play(playerXName, playerOName);
+        new TicTacToeVs();
+    }
+    private void connect4clicked() {
+        // Mengambil nama pemain X dan O dari input field
+
+
+        // Menyembunyikan layar awal
+        setVisible(false);
+
+        // Memulai permainan dengan nama pemain
+        new Connect4Vs();
     }
 
     public static void main(String[] args) {
