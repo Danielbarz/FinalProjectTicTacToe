@@ -104,7 +104,7 @@ public class TicTacToeVs extends JFrame {
         setVisible(false);
 
         // Memulai permainan 2 Players
-        System.out.println("Tic Tac Toe (2 Players) game started!");
+        new NameTTT();
     }
 
     private void backisclicked() {

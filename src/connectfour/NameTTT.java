@@ -102,7 +102,7 @@ public class NameTTT extends JFrame {
     private void backisclicked() {
         // Menutup layar ini dan kembali ke layar sebelumnya
         setVisible(false);
-        new Connect4Vs(); // Ganti dengan layar sebelumnya
+        new TicTacToeVs(); // Ganti dengan layar sebelumnya
     }
 
     private void startGameClicked() {
