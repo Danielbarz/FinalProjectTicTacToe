@@ -1,4 +1,4 @@
-package connectfour;
+package jungleFrenzy;
 import javax.swing.*;
 
 public class Main {

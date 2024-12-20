@@ -1,4 +1,4 @@
-package connectfour;
+package jungleFrenzy;
 
 import java.io.IOException;
 import java.net.URL;

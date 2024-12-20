@@ -1,4 +1,4 @@
-package connectfour;
+package jungleFrenzy;
 
 import java.awt.Image;
 import java.net.URL;

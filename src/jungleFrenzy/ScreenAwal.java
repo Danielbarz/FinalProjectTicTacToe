@@ -1,8 +1,7 @@
-package connectfour;
+package jungleFrenzy;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class ScreenAwal extends JFrame {
     private JButton tictactoe;

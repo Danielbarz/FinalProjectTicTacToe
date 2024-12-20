@@ -1,4 +1,4 @@
-package connectfour;
+package jungleFrenzy;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,14 +48,14 @@ public class NameCF extends JFrame {
         player1Field.setOpaque(false); // Transparan
         player1Field.setBorder(null);
         player1Field.setPreferredSize(new Dimension(150, 50));
-        player1Field.setFont(new Font("Forte", Font.BOLD, 22));
+        player1Field.setFont(new Font("Book Antiqua", Font.BOLD, 22));
 
         // Membuat input nama player 2
         player2Field = new JTextField();
         player2Field.setOpaque(false); // Transparan
         player2Field.setBorder(null);
         player2Field.setPreferredSize(new Dimension(150, 50));
-        player2Field.setFont(new Font("Forte", Font.BOLD, 22));
+        player2Field.setFont(new Font("Book Antiqua", Font.BOLD, 22));
 
         // Tombol Start Game
         startGame = new JButton("");
@@ -73,12 +73,12 @@ public class NameCF extends JFrame {
 
         gbc.gridx = 1;
         gbc.gridy = 2;
-        gbc.insets = new Insets(35, 0, 0, 320);
+        gbc.insets = new Insets(40, -0, 0, 320);
         controlsPanel.add(player1Field, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 3;
-        gbc.insets = new Insets(70, 0, 0, 320);
+        gbc.insets = new Insets(60, 0, 0, 320);
         controlsPanel.add(player2Field, gbc);
 
         // Tambahkan Tombol Start Game
