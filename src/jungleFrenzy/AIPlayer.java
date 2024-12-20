@@ -5,8 +5,8 @@ import java.util.Random;
 public class AIPlayer extends Player {
     private final Random random;
 
-    public AIPlayer(char symbol) {
-        super(symbol);
+    public AIPlayer(Seed seed) {
+        super(seed);
         random = new Random();
     }
 
@@ -17,7 +17,7 @@ public class AIPlayer extends Player {
             row = random.nextInt(game.getSize());
             col = random.nextInt(game.getSize());
         } while (!game.isValidMove(row, col));
-        game.placeMove(row, col, symbol);
-        System.out.println("AI placed " + symbol + " at (" + row + ", " + col + ")");
+        game.placeMove(row, col, seed);
+        System.out.println("AI placed " + seed.getDisplayName() + " at (" + row + ", " + col + ")");
     }
 }

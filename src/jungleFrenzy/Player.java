@@ -1,15 +1,18 @@
 package jungleFrenzy;
 
 public abstract class Player {
-    protected char symbol;
+    protected Seed seed; // Menggunakan Seed alih-alih char
 
-    public Player(char symbol) {
-        this.symbol = symbol;
+    // Konstruktor
+    public Player(Seed seed) {
+        this.seed = seed;
     }
 
-    public char getSymbol() {
-        return symbol;
+    // Getter untuk Seed
+    public Seed getSeed() {
+        return seed;
     }
 
+    // Metode abstrak untuk membuat langkah
     public abstract void makeMove(TicTacToe game);
 }

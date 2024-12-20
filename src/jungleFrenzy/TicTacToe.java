@@ -1,17 +1,17 @@
 package jungleFrenzy;
 
 public class TicTacToe {
-    private char[][] board;
+    private Seed[][] board;
     private int size;
     private Player playerX;
     private Player playerO;
 
     public TicTacToe(int size) {
         this.size = size;
-        board = new char[size][size];
+        board = new Seed[size][size];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                board[i][j] = '-';
+                board[i][j] = Seed.NO_SEED; // Inisialisasi kosong
             }
         }
     }
@@ -20,20 +20,21 @@ public class TicTacToe {
         return size;
     }
 
-    public char[][] getBoard() {
+    public Seed[][] getBoard() {
         return board;
     }
 
     public boolean isValidMove(int row, int col) {
-        return row >= 0 && row < size && col >= 0 && col < size && board[row][col] == '-';
+        return row >= 0 && row < size && col >= 0 && col < size && board[row][col] == Seed.NO_SEED;
     }
 
-    public void placeMove(int row, int col, char symbol) {
-        board[row][col] = symbol;
+    public void placeMove(int row, int col, Seed seed) {
+        board[row][col] = seed;
     }
+
 
     public boolean checkForWin() {
-        // Check rows, columns, and diagonals for a win
+        // Periksa kemenangan pada baris, kolom, dan diagonal
         for (int i = 0; i < size; i++) {
             if (checkRow(i) || checkColumn(i)) {
                 return true;
@@ -43,8 +44,8 @@ public class TicTacToe {
     }
 
     private boolean checkRow(int row) {
-        char first = board[row][0];
-        if (first == '-') return false;
+        Seed first = board[row][0];
+        if (first == Seed.NO_SEED) return false;
         for (int col = 1; col < size; col++) {
             if (board[row][col] != first) return false;
         }
@@ -52,8 +53,8 @@ public class TicTacToe {
     }
 
     private boolean checkColumn(int col) {
-        char first = board[0][col];
-        if (first == '-') return false;
+        Seed first = board[0][col];
+        if (first == Seed.NO_SEED) return false;
         for (int row = 1; row < size; row++) {
             if (board[row][col] != first) return false;
         }
@@ -61,8 +62,8 @@ public class TicTacToe {
     }
 
     private boolean checkDiagonal() {
-        char first = board[0][0];
-        if (first != '-') {
+        Seed first = board[0][0];
+        if (first != Seed.NO_SEED) {
             boolean win = true;
             for (int i = 1; i < size; i++) {
                 if (board[i][i] != first) {
@@ -74,7 +75,7 @@ public class TicTacToe {
         }
 
         first = board[0][size - 1];
-        if (first != '-') {
+        if (first != Seed.NO_SEED) {
             for (int i = 1; i < size; i++) {
                 if (board[i][size - 1 - i] != first) {
                     return false;
@@ -88,7 +89,7 @@ public class TicTacToe {
     public boolean isBoardFull() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (board[i][j] == '-') return false;
+                if (board[i][j] == Seed.NO_SEED) return false;
             }
         }
         return true;
