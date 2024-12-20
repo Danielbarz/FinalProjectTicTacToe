@@ -104,7 +104,7 @@ public class TicTacToeGUI extends JFrame {
         leftBottomPanel.setOpaque(false);
         leftBottomPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Align left
         JButton resetButton = new JButton("RESET");
-        resetButton.setFont(new Font("Arial", Font.PLAIN, 22));
+        resetButton.setFont(new Font("Book Antiqua", Font.PLAIN, 22));
         resetButton.setOpaque(false);
         resetButton.setContentAreaFilled(false);
         resetButton.setBorderPainted(false);
@@ -118,7 +118,7 @@ public class TicTacToeGUI extends JFrame {
         rightBottomPanel.setOpaque(false);
 
         turnLabel = new JLabel("Turn: Player: " + currentPlayer);
-        turnLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        turnLabel.setFont(new Font("Book Antiqua", Font.BOLD, 20));
         turnLabel.setForeground(Color.WHITE);
         turnLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the text
 
@@ -141,8 +141,8 @@ public class TicTacToeGUI extends JFrame {
     }
 
     private JPanel getjPanel() {
-        JButton backButton = new JButton("MENU");
-        backButton.setFont(new Font("Arial", Font.PLAIN, 22));
+        JButton backButton = new JButton("Menu");
+        backButton.setFont(new Font("Book Antiqua", Font.PLAIN, 22));
         backButton.setOpaque(false); // Membuat tombol transparan
         backButton.setContentAreaFilled(false); // Menghapus latar belakang tombol
         backButton.setBorderPainted(false); // Menghapus border tombol
