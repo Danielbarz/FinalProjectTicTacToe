@@ -20,7 +20,7 @@ public class TicTacToeGUI extends JFrame {
     private final int boardSize; // Store the board size for reset functionality
     private final boolean playAgainstAI; // Store whether the game is against AI
 
-    public TicTacToeGUI(boolean playAgainstAI, int boardSize) {
+    public TicTacToeGUI(boolean playAgainstAI, int boardSize, String player1Name, String player2Name) {
         this.playAgainstAI = playAgainstAI;
         this.boardSize = boardSize;
         this.player1Name = player1Name;
@@ -33,11 +33,11 @@ public class TicTacToeGUI extends JFrame {
 
     private void initializeGame() {
         game = new TicTacToe(boardSize); // Create a new game with the selected board size
-        game.setPlayerX(new HumanPlayer('X')); // Set player X as human
+        game.setPlayerX(new HumanPlayer(Seed.CROSS)); // Set player X as CROSS
         if (playAgainstAI) {
-            game.setPlayerO(new AIPlayer('O')); // Set player O as AI
+            game.setPlayerO(new AIPlayer(Seed.NOUGHT)); // Set player O as NOUGHT
         } else {
-            game.setPlayerO(new HumanPlayer('O')); // Set player O as human
+            game.setPlayerO(new HumanPlayer(Seed.NOUGHT)); // Set player O as NOUGHT
         }
         currentPlayer = game.getPlayerX(); // Start with player X
     }
@@ -48,7 +48,7 @@ public class TicTacToeGUI extends JFrame {
 
         JPanel mainPanel = new JPanel(new BorderLayout()); // Use BorderLayout for the main panel
 
-        JLabel backgroundLabel = new JLabel(new ImageIcon("src/image/TTTBg.gif")); // Adjust path as needed
+        JLabel backgroundLabel = new JLabel(new ImageIcon("src/image/TTTBgNew.gif")); // Adjust path as needed
         backgroundLabel.setLayout(new BorderLayout());
 
         // Grid Panel for Tic Tac Toe with fixed size
@@ -103,11 +103,12 @@ public class TicTacToeGUI extends JFrame {
         JPanel leftBottomPanel = new JPanel(); // Panel for reset button
         leftBottomPanel.setOpaque(false);
         leftBottomPanel.setLayout(new FlowLayout(FlowLayout.LEFT)); // Align left
-        JButton resetButton = new JButton("RESET");
+        JButton resetButton = new JButton("   ");
         resetButton.setFont(new Font("Book Antiqua", Font.PLAIN, 22));
         resetButton.setOpaque(false);
         resetButton.setContentAreaFilled(false);
         resetButton.setBorderPainted(false);
+        resetButton.setFocusPainted(false);
         resetButton.setForeground(Color.BLACK);
         resetButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         resetButton.addActionListener(e -> resetGame());
@@ -117,7 +118,7 @@ public class TicTacToeGUI extends JFrame {
         rightBottomPanel.setLayout(new BoxLayout(rightBottomPanel, BoxLayout.Y_AXIS));
         rightBottomPanel.setOpaque(false);
 
-        turnLabel = new JLabel("Turn: Player: " + currentPlayer);
+        turnLabel = new JLabel("Turn: " + player1Name);
         turnLabel.setFont(new Font("Book Antiqua", Font.BOLD, 20));
         turnLabel.setForeground(Color.WHITE);
         turnLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the text
@@ -141,12 +142,13 @@ public class TicTacToeGUI extends JFrame {
     }
 
     private JPanel getjPanel() {
-        JButton backButton = new JButton("Menu");
+        JButton backButton = new JButton("   ");
         backButton.setFont(new Font("Book Antiqua", Font.PLAIN, 22));
         backButton.setOpaque(false); // Membuat tombol transparan
         backButton.setContentAreaFilled(false); // Menghapus latar belakang tombol
         backButton.setBorderPainted(false); // Menghapus border tombol
         backButton.setForeground(Color.BLACK); // Warna teks tombol menjadi hitam
+        backButton.setFocusPainted(false);
         backButton.addActionListener(e -> {
             dispose();
             new ScreenAwal(); // Pastikan StartPage() ada dalam proyek
@@ -215,12 +217,19 @@ public class TicTacToeGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (game.isValidMove(row, col)) {
-                game.placeMove(row, col, currentPlayer.getSymbol());
-                buttons[row][col].setText(String.valueOf(currentPlayer.getSymbol()));
+                game.placeMove(row, col, currentPlayer.getSeed());
+                Image img = currentPlayer.getSeed().getImage();
+                if (img != null) {
+                    img = img.getScaledInstance(buttons[row][col].getWidth(), buttons[row][col].getHeight(), Image.SCALE_SMOOTH);
+                    buttons[row][col].setIcon(new ImageIcon(img));
+                } else {
+                    System.err.println("Image not found for: " + currentPlayer.getSeed().getDisplayName());
+                }
 
                 if (game.checkForWin()) {
                     timer.stop();
-                    JOptionPane.showMessageDialog(null, "Player " + currentPlayer.getSymbol() + " wins!");
+                    String winnerName = (currentPlayer == game.getPlayerX()) ? player1Name : player2Name;
+                    JOptionPane.showMessageDialog(null, winnerName + " wins!");
                     resetGame();
                 } else if (game.isBoardFull()) {
                     timer.stop();
@@ -233,36 +242,40 @@ public class TicTacToeGUI extends JFrame {
         }
     }
 
+
     private void updateBoard() {
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                buttons[i][j].setText(String.valueOf(game.getBoard()[i][j]));
+                Seed cellSeed = game.getBoard()[i][j];
+                if (cellSeed != Seed.NO_SEED) {
+                    Image img = cellSeed.getImage();
+                    if (img != null) {
+                        img = img.getScaledInstance(buttons[i][j].getWidth(), buttons[i][j].getHeight(), Image.SCALE_SMOOTH);
+                        buttons[i][j].setIcon(new ImageIcon(img));
+                    }
+                } else {
+                    buttons[i][j].setIcon(null); // Hapus ikon
+                }
             }
         }
-        if (game.checkForWin()) {
-            timer.stop();
-            JOptionPane.showMessageDialog(null, "Player " + currentPlayer.getSymbol() + " wins!");
-            resetGame();
-        } else if (game.isBoardFull()) {
-            timer.stop();
-            JOptionPane.showMessageDialog(null, "The game is a tie!");
-            resetGame();
-        }
     }
+
+
 
     private void resetGame() {
         timer.stop(); // Stop the timer
         initializeGame(); // Reinitialize the game state
         resetBoard(); // Clear the board
-        turnLabel.setText("Turn: Player X"); // Reset the turn label
+        turnLabel.setText("Turn: " + player1Name); // Reset the turn label
         startTimer(); // Restart the timer
     }
 
     private void resetBoard() {
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
-                buttons[i][j].setText("-");
+                buttons[i][j].setIcon(null); // Hapus gambar
             }
         }
     }
+
 }

@@ -3,8 +3,8 @@ package jungleFrenzy;
 import java.util.Scanner;
 
 public class HumanPlayer extends Player {
-    public HumanPlayer(char symbol) {
-        super(symbol);
+    public HumanPlayer(Seed seed) {
+        super(seed);
     }
 
     @Override
@@ -16,6 +16,6 @@ public class HumanPlayer extends Player {
             row = scanner.nextInt();
             col = scanner.nextInt();
         } while (!game.isValidMove(row, col));
-        game.placeMove(row, col, symbol);
+        game.placeMove(row, col, seed);
     }
 }

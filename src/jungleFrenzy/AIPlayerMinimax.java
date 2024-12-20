@@ -1,75 +1,60 @@
 package jungleFrenzy;
 
-/** AIPlayer using Minimax algorithm */
 public class AIPlayerMinimax extends Player {
 
-    public AIPlayerMinimax(char symbol) {
-        super(symbol);
+    public AIPlayerMinimax(Seed seed) {
+        super(seed);
     }
 
     @Override
     public void makeMove(TicTacToe game) {
-        int[] bestMove = minimax(game, symbol);
-        game.placeMove(bestMove[0], bestMove[1], symbol);
-        System.out.println("AI placed " + symbol + " at (" + bestMove[0] + ", " + bestMove[1] + ")");
+        int[] bestMove = minimax(game, seed, true, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        game.placeMove(bestMove[1], bestMove[2], seed);
+        System.out.println("AI placed " + seed.getDisplayName() + " at (" + bestMove[1] + ", " + bestMove[2] + ")");
     }
 
-    private int[] minimax(TicTacToe game, char player) {
+    private int[] minimax(TicTacToe game, Seed currentPlayer, boolean isMaximizing, int alpha, int beta) {
         if (game.checkForWin()) {
-            return new int[]{-1, -1}; // Game over
+            return new int[]{isMaximizing ? -10 : 10, -1, -1};
         }
         if (game.isBoardFull()) {
-            return new int[]{-1, -1}; // Tie
+            return new int[]{0, -1, -1};
         }
 
-        int bestScore = (player == symbol) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-        int[] bestMove = new int[]{-1, -1};
+        int bestScore = isMaximizing ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        int[] bestMove = {-1, -1, -1};
 
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < game.getSize(); i++) {
+            for (int j = 0; j < game.getSize(); j++) {
                 if (game.isValidMove(i, j)) {
-                    game.placeMove(i, j, player);
-                    int score = minimaxScore(game, player);
-                    game.placeMove(i, j, '-'); // Undo move
+                    game.placeMove(i, j, currentPlayer);
 
-                    if (player == symbol && score > bestScore) {
-                        bestScore = score;
-                        bestMove = new int[]{i, j};
-                    } else if (player != symbol && score < bestScore) {
-                        bestScore = score;
-                        bestMove = new int[]{i, j};
+                    // Gunakan Seed lawan
+                    Seed opponentSeed = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS;
+                    int score = minimax(game, opponentSeed, !isMaximizing, alpha, beta)[0];
+
+                    game.placeMove(i, j, Seed.NO_SEED); // Undo move
+
+                    if (isMaximizing) {
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMove = new int[]{score, i, j};
+                        }
+                        alpha = Math.max(alpha, score);
+                    } else {
+                        if (score < bestScore) {
+                            bestScore = score;
+                            bestMove = new int[]{score, i, j};
+                        }
+                        beta = Math.min(beta, score);
+                    }
+
+                    if (beta <= alpha) {
+                        return bestMove;
                     }
                 }
             }
         }
         return bestMove;
-    }
-
-    private int minimaxScore(TicTacToe game, char player) {
-        if (game.checkForWin()) {
-            return (player == symbol) ? -1 : 1; // Return score based on who won
-        }
-        if (game.isBoardFull()) {
-            return 0; // Tie
-        }
-
-        int bestScore = (player == symbol) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (game.isValidMove(i, j)) {
-                    game.placeMove(i, j, player);
-                    int score = minimaxScore(game, (player == symbol) ? 'O' : 'X');
-                    game.placeMove(i, j, '-'); // Undo move
-
-                    if (player == symbol) {
-                        bestScore = Math.max(score, bestScore);
-                    } else {
-                        bestScore = Math.min(score, bestScore);
-                    }
-                }
-            }
-        }
-        return bestScore;
     }
 }

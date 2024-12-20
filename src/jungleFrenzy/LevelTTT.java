@@ -1,6 +1,5 @@
 package jungleFrenzy;
 
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,11 +11,14 @@ public class LevelTTT extends JFrame {
 
     private JPanel backgroundPanel;
 
-    NameTTT getGetPlayer1name;
-    NameTTT getPlayer2name;
+    private final String player1Name;
+    private final String player2Name;
 
-    public LevelTTT() {
-        setTitle("Choose Player");
+    public LevelTTT(String p1, String p2) {
+        this.player1Name = p1;
+        this.player2Name = p2;
+
+        setTitle("Choose Level");
         setSize(900, 600);
         setLocationRelativeTo(null);  // Menempatkan window di tengah
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,28 +39,32 @@ public class LevelTTT extends JFrame {
         backgroundPanel.setLayout(new GridBagLayout());
         add(backgroundPanel, BorderLayout.CENTER);
 
-        // Membuat tombol VS AI
+        // Membuat tombol Easy
         Easy = new JButton("");
         Easy.setContentAreaFilled(false);
         Easy.setFocusPainted(false);
         Easy.setBorderPainted(false);
         Easy.setOpaque(false); // Transparan
         Easy.setPreferredSize(new Dimension(150, 100));
+        Easy.addActionListener(e -> startGame(3));
 
-        // Membuat tombol 2 Players
+        // Membuat tombol Medium
         Medium = new JButton("");
         Medium.setContentAreaFilled(false);
         Medium.setFocusPainted(false);
         Medium.setBorderPainted(false);
         Medium.setOpaque(false); // Transparan
         Medium.setPreferredSize(new Dimension(150, 100));
+        Medium.addActionListener(e -> startGame(4));
 
+        // Membuat tombol Hard
         Hard = new JButton("");
         Hard.setContentAreaFilled(false);
         Hard.setFocusPainted(false);
         Hard.setBorderPainted(false);
         Hard.setOpaque(false); // Transparan
         Hard.setPreferredSize(new Dimension(150, 100));
+        Hard.addActionListener(e -> startGame(5));
 
         // Membuat tombol Back
         back = new JButton("");
@@ -67,41 +73,35 @@ public class LevelTTT extends JFrame {
         back.setBorderPainted(false);
         back.setOpaque(false); // Transparan
         back.setPreferredSize(new Dimension(110, 50));
-
-        // Menambahkan aksi ke tombol
-        Easy.addActionListener(e -> easy());
-        Medium.addActionListener(e -> Medium());
-        Hard.addActionListener(e -> Hard());
         back.addActionListener(e -> backisclicked());
 
         // Membuat panel kontrol
         JPanel controlsPanel = new JPanel(new GridBagLayout());
         controlsPanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
-        controlsPanel.setLayout(new GridBagLayout());
 
-// Easy button
-        gbc.gridx = 1; // Kolom pertama
-        gbc.gridy = 3; // Baris pertama
-        gbc.insets = new Insets(10, -150, 130, 30); // Margin sekitar tombol
+        // Easy button
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.insets = new Insets(10, -150, 130, 30);
         controlsPanel.add(Easy, gbc);
 
-// Medium button
-        gbc.gridx = 2; // Kolom kedua
-        gbc.gridy = 3; // Baris pertama
+        // Medium button
+        gbc.gridx = 2;
+        gbc.gridy = 3;
         gbc.insets = new Insets(20, 80, 130, 80);
         controlsPanel.add(Medium, gbc);
 
-// Hard button
-        gbc.gridx = 3; // Kolom ketiga
-        gbc.gridy = 3; // Baris pertama
+        // Hard button
+        gbc.gridx = 3;
+        gbc.gridy = 3;
         gbc.insets = new Insets(20, 10, 130, 100);
         controlsPanel.add(Hard, gbc);
 
-        // Tombol Back
+        // Back button
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, -10, 250, 120); // Sesuaikan posisi
+        gbc.insets = new Insets(0, -10, 250, 120);
         controlsPanel.add(back, gbc);
 
         // Menambahkan panel kontrol ke panel latar belakang
@@ -110,39 +110,13 @@ public class LevelTTT extends JFrame {
         setVisible(true);
     }
 
-    private void easy() {
-        // Menyembunyikan layar awal
+    private void startGame(int boardSize) {
         setVisible(false);
-
-        // Memulai permainan Tic Tac Toe
-        new TicTacToeGUI(false, 3);
-    }
-    private void Medium() {
-        // Menyembunyikan layar awal
-        setVisible(false);
-
-        // Memulai permainan Tic Tac Toe
-        new TicTacToeGUI(false, 4);
-    }
-
-    private void Hard() {
-        // Menyembunyikan layar awal
-        setVisible(false);
-
-        // Memulai permainan Tic Tac Toe
-        new TicTacToeGUI(false, 5);
+        new TicTacToeGUI(false, boardSize, player1Name, player2Name);
     }
 
     private void backisclicked() {
-        // Menyembunyikan layar awal
         setVisible(false);
-
-        // Kembali ke layar awal
-        new TicTacToeVs();
+        new NameTTT();
     }
-    public static void main(String args[]){
-        new LevelTTT();
-    };
 }
-
-

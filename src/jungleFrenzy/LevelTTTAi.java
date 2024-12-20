@@ -112,14 +112,14 @@ public class LevelTTTAi extends JFrame {
         setVisible(false);
 
         // Memulai permainan Tic Tac Toe
-        new TicTacToeGUI(true, 3);
+        new TicTacToeGUI(true, 3, "Player", "AI");
     }
     private void Medium() {
         // Menyembunyikan layar awal
         setVisible(false);
 
         // Memulai permainan Tic Tac Toe
-        new TicTacToeGUI(true, 4);
+        new TicTacToeGUI(true, 4, "Player", "AI");
     }
 
     private void Hard() {
@@ -127,7 +127,7 @@ public class LevelTTTAi extends JFrame {
         setVisible(false);
 
         // Memulai permainan Tic Tac Toe
-        new TicTacToeGUI(true, 5);
+        new TicTacToeGUI(true, 5, "Player", "AI");
     }
 
     private void backisclicked() {
@@ -138,8 +138,6 @@ public class LevelTTTAi extends JFrame {
         new TicTacToeVs();
     }
     public static void main(String args[]){
-        new LevelTTT();
+        new LevelTTT("Player 1", "AI");
     };
 }
-
-
