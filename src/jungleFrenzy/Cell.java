@@ -31,16 +31,18 @@ public class Cell {
 
     /** Paint itself on the graphics canvas, given the Graphics context */
     public void paint(Graphics g, int x, int y, int size) {
-        // Hapus latar belakang solid (g.fillRect)
-        g.setColor(Color.BLACK);
-        g.drawRect(x, y, size, size); // Gambar garis tepi cell (grid)
-
-        if (content == Seed.CROSS || content == Seed.NOUGHT) {
-            // Gambar content (CROSS atau NOUGHT) di tengah cell
-            int padding = size / 5;
-            int seedSize = size - 2 * padding;
-            g.drawImage(content.getImage(), x + padding, y + padding, seedSize, seedSize, null);
+        if (content != Seed.NO_SEED) {
+            // Draw the associated image for the Seed
+            Image img = content.getImage();
+            if (img != null) {
+                g.drawImage(img, x + PADDING, y + PADDING, SEED_SIZE, SEED_SIZE, null);
+            } else {
+                // Fallback: draw an oval if no image is found
+                g.setColor(content == Seed.CROSS ? Color.RED : Color.YELLOW);
+                g.fillOval(x + PADDING, y + PADDING, SEED_SIZE, SEED_SIZE);
+            }
         }
     }
+
 
 }

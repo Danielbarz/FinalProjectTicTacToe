@@ -15,7 +15,7 @@ public class Board {
     private int cellSize; // Dynamic cell size
     public static final int GRID_WIDTH = 8;  // Grid-line's width
     public static final int GRID_WIDTH_HALF = GRID_WIDTH / 2; // Grid-line's half-width
-    public static final Color COLOR_GRID = Color.LIGHT_GRAY;  // grid lines
+    public static final Color COLOR_GRID = new Color(61, 29, 18);  // grid lines
     public static final int Y_OFFSET = 1;  // Fine tune for better display
 
     // Define properties (package-visible)
@@ -126,7 +126,7 @@ public class Board {
     public void updateDimensions(int width, int height) {
         canvasWidth = width;
         canvasHeight = height;
-        cellSize = Math.min(canvasWidth / COLS, canvasHeight / ROWS);
+        cellSize = Math.min(canvasWidth / COLS, canvasHeight / ROWS); // Adjust cell size dynamically
     }
 
     // Getter methods for canvas dimensions
@@ -138,14 +138,36 @@ public class Board {
         return canvasHeight;
     }
 
+    public int getCellSize() {
+        return cellSize;
+    }
+
     /** Paint itself on the graphics canvas, given the Graphics context */
     public void paint(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(COLOR_GRID);
+        g2d.setStroke(new BasicStroke(GRID_WIDTH));
+
+        // Draw the grid lines
+        for (int row = 0; row <= ROWS; row++) {
+            int y = row * cellSize;
+            g2d.drawLine(0, y, COLS * cellSize, y); // Horizontal lines
+        }
+        for (int col = 0; col <= COLS; col++) {
+            int x = col * cellSize;
+            g2d.drawLine(x, 0, x, ROWS * cellSize); // Vertical lines
+        }
+
+        // Paint each cell's content (if any)
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
                 cells[row][col].paint(g, col * cellSize, row * cellSize, cellSize);
             }
         }
+
+
     }
+
 
 
 }
