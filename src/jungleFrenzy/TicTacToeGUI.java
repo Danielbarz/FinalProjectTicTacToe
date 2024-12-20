@@ -10,6 +10,9 @@ public class TicTacToeGUI extends JFrame {
     private JButton[][] buttons;
     private TicTacToe game;
     private Player currentPlayer;
+    private String player1Name;
+    private String player2Name;
+
     private JLabel timerLabel;
     private JLabel turnLabel; // Label to display whose turn it is
     private Timer timer;
@@ -19,11 +22,14 @@ public class TicTacToeGUI extends JFrame {
 
     public TicTacToeGUI(boolean playAgainstAI, int boardSize) {
         this.playAgainstAI = playAgainstAI;
-        this.boardSize = boardSize; // Store the board size
-        initializeGame(); // Initialize the game state
-        initializeUI(); // Initialize the UI
-        startTimer(); // Start the 30-second timer
+        this.boardSize = boardSize;
+        this.player1Name = player1Name;
+        this.player2Name = player2Name;
+        initializeGame();
+        initializeUI();
+        startTimer();
     }
+
 
     private void initializeGame() {
         game = new TicTacToe(boardSize); // Create a new game with the selected board size
@@ -111,7 +117,7 @@ public class TicTacToeGUI extends JFrame {
         rightBottomPanel.setLayout(new BoxLayout(rightBottomPanel, BoxLayout.Y_AXIS));
         rightBottomPanel.setOpaque(false);
 
-        turnLabel = new JLabel("Turn: Player X");
+        turnLabel = new JLabel("Turn: Player: " + currentPlayer);
         turnLabel.setFont(new Font("Arial", Font.BOLD, 20));
         turnLabel.setForeground(Color.WHITE);
         turnLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the text
@@ -176,7 +182,8 @@ public class TicTacToeGUI extends JFrame {
     private void switchPlayer() {
         timer.stop(); // Stop the timer for the current player
         currentPlayer = (currentPlayer == game.getPlayerX()) ? game.getPlayerO() : game.getPlayerX();
-        turnLabel.setText("Turn: " + (currentPlayer instanceof AIPlayer ? "AI" : "Player " + currentPlayer.getSymbol())); // Update the turn label
+        String currentPlayerName = (currentPlayer == game.getPlayerX()) ? player1Name : player2Name;
+        turnLabel.setText("Turn: " + currentPlayerName); // Update the turn label
         startTimer(); // Restart the timer for the next player
 
         if (currentPlayer instanceof AIPlayer) {
@@ -184,7 +191,7 @@ public class TicTacToeGUI extends JFrame {
             updateBoard();
 
             if (game.checkForWin()) {
-                JOptionPane.showMessageDialog(null, "Player " + currentPlayer.getSymbol() + " wins!");
+                JOptionPane.showMessageDialog(null, currentPlayerName + " wins!");
                 resetGame();
             } else if (game.isBoardFull()) {
                 JOptionPane.showMessageDialog(null, "The game is a tie!");
@@ -194,6 +201,7 @@ public class TicTacToeGUI extends JFrame {
             }
         }
     }
+
 
     private class ButtonClickListener implements ActionListener {
         private final int row;

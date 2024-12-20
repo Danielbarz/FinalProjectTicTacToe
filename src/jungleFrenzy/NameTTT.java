@@ -4,8 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class NameTTT extends JFrame {
-    private JTextField player1Field;
-    private JTextField player2Field;
+    public JTextField player1Field;
+    public JTextField player2Field;
     private JButton back;
     private JButton startGame;
 

@@ -12,6 +12,9 @@ public class LevelTTT extends JFrame {
 
     private JPanel backgroundPanel;
 
+    NameTTT getGetPlayer1name;
+    NameTTT getPlayer2name;
+
     public LevelTTT() {
         setTitle("Choose Player");
         setSize(900, 600);
