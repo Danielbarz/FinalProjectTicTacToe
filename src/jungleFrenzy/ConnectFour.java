@@ -20,7 +20,6 @@ public class ConnectFour extends JPanel {
     private int timeElapsed;     // Time elapsed in seconds
     private int redWins = 0;     // Number of wins for Red
     private int yellowWins = 0;  // Number of wins for Yellow
-    private JPanel layeredPane;
 
     // Constructor to initialize the game interface and state
     public ConnectFour(String playerXName, String playerOName) {
@@ -31,27 +30,39 @@ public class ConnectFour extends JPanel {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(board.getCanvasWidth() + 200, board.getCanvasHeight()));
 
-        // Create and add panels
-        layeredPane = createBackgroundPanel();
+        JLabel backgroundLabel = new JLabel(new ImageIcon(getClass().getResource("/image/CFBG.gif"))); // Replace with your image path
+        backgroundLabel.setLayout(new BorderLayout());
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setOpaque(false);
+
         JPanel boardPanel = createBoardPanel();
         JPanel statusPanel = createStatusPanel(playerXName, playerOName);
 
-        layeredPane.add(boardPanel, BorderLayout.CENTER);
-        layeredPane.add(statusPanel, BorderLayout.EAST);
+        backgroundLabel.add(boardPanel, BorderLayout.CENTER);
+        backgroundLabel.add(statusPanel, BorderLayout.EAST);
 
-        add(layeredPane, BorderLayout.CENTER);
+        mainPanel.add(backgroundLabel, BorderLayout.CENTER);
+        add(mainPanel, BorderLayout.CENTER);
 
         // Set up a timer
         timer = new Timer(1000, e -> updateTimer());
         timer.start();
 
         // Add mouse listener for the board
-        addMouseListener(new MouseAdapter() {
+        boardPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int col = e.getX() / Cell.SIZE;
+                // Directly calculate the column based on raw x-coordinate
+                int col = e.getX() / board.getCellSize();
+
+                // Debug: Print mouse click info
+                System.out.println("Mouse X: " + e.getX());
+                System.out.println("Calculated Col: " + col);
+
                 if (currentState == State.PLAYING) {
                     if (col >= 0 && col < Board.COLS) {
+                        // Process the column click
                         for (int row = Board.ROWS - 1; row >= 0; row--) {
                             if (board.cells[row][col].content == Seed.NO_SEED) {
                                 board.cells[row][col].content = currentPlayer;
@@ -67,21 +78,6 @@ public class ConnectFour extends JPanel {
                 repaint();
             }
         });
-    }
-
-    private JPanel createBackgroundPanel() {
-        JPanel backgroundPanel = new JPanel(new BorderLayout()) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                ImageIcon icon = new ImageIcon(getClass().getResource("/image/CFBG.gif")); // Replace with your image path
-                if (icon != null) {
-                    Image img = icon.getImage();
-                    g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
-                }
-            }
-        };
-        return backgroundPanel;
     }
 
     private JPanel createStatusPanel(String playerXName, String playerOName) {
@@ -113,15 +109,22 @@ public class ConnectFour extends JPanel {
         yellowCounterLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         yellowCounterLabel.setForeground(new Color(255, 222, 0));
 
-        clearButton = new JButton("Reset");
+        clearButton = new JButton("   ");
         clearButton.setFont(new Font("Book Antiqua", Font.BOLD, 14));
         clearButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         clearButton.addActionListener(e -> clearAll());
+        clearButton.setOpaque(false);
+        clearButton.setContentAreaFilled(false);
+        clearButton.setBorderPainted(false);
+        clearButton.setFocusPainted(false);
 
-        homeButton = new JButton("Home");
+        homeButton = new JButton("   ");
         homeButton.setFont(new Font("Book Antiqua", Font.BOLD, 14));
         homeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         homeButton.addActionListener(e -> backToHome());
+        homeButton.setOpaque(false);
+        homeButton.setContentAreaFilled(false);
+        homeButton.setBorderPainted(false);
 
         // Add components to the info panel
         infoPanel.add(Box.createVerticalStrut(20));
@@ -132,9 +135,9 @@ public class ConnectFour extends JPanel {
         infoPanel.add(redCounterLabel);
         infoPanel.add(Box.createVerticalStrut(10));
         infoPanel.add(yellowCounterLabel);
-        infoPanel.add(Box.createVerticalStrut(20));
+        infoPanel.add(Box.createVerticalStrut(10));
         infoPanel.add(clearButton);
-        infoPanel.add(Box.createVerticalStrut(20));
+        infoPanel.add(Box.createVerticalStrut(25));
         infoPanel.add(homeButton);
 
         infoPanel.setOpaque(false);
@@ -228,10 +231,5 @@ public class ConnectFour extends JPanel {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setVisible(true);
         });
-    }
-
-    // Shortcut main method to quickly launch the game
-    public static void main(String[] args) {
-        play("Player 1", "Player 2");
     }
 }
