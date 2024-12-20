@@ -34,7 +34,8 @@ public enum Seed {   // to save as "Seed.java"
             ImageIcon icon = null;
             if (imgURL != null) {
                 icon = new ImageIcon(imgURL);
-                //System.out.println(icon);  // debugging
+                System.out.println(icon);  // debugging
+                System.out.println("Loaded image: " + imageFilename);//debugging
             } else {
                 System.err.println("Couldn't find file " + imageFilename);
             }

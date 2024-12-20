@@ -31,13 +31,18 @@ public class Cell {
 
     /** Paint itself on the graphics canvas, given the Graphics context */
     public void paint(Graphics g, int x, int y, int size) {
-        if (content == Seed.CROSS) {
-            g.setColor(Color.RED);
-            g.fillOval(x + 10, y + 10, size - 20, size - 20); // Draw RED token
-        } else if (content == Seed.NOUGHT) {
-            g.setColor(Color.YELLOW);
-            g.fillOval(x + 10, y + 10, size - 20, size - 20); // Draw YELLOW token
+        if (content != Seed.NO_SEED) {
+            // Draw the associated image for the Seed
+            Image img = content.getImage();
+            if (img != null) {
+                g.drawImage(img, x + PADDING, y + PADDING, SEED_SIZE, SEED_SIZE, null);
+            } else {
+                // Fallback: draw an oval if no image is found
+                g.setColor(content == Seed.CROSS ? Color.RED : Color.YELLOW);
+                g.fillOval(x + PADDING, y + PADDING, SEED_SIZE, SEED_SIZE);
+            }
         }
     }
+
 
 }

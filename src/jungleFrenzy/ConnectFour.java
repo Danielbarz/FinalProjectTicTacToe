@@ -99,12 +99,12 @@ public class ConnectFour extends JPanel {
         timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         timerLabel.setForeground(new Color(0, 0, 0));
 
-        redCounterLabel = new JLabel(playerXName + " (Red): 0");
+        redCounterLabel = new JLabel(playerXName + " (Apple): 0");
         redCounterLabel.setFont(new Font("Book Antiqua", Font.BOLD, 14));
         redCounterLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         redCounterLabel.setForeground(new Color(255, 0, 0));
 
-        yellowCounterLabel = new JLabel(playerOName + " (Yellow): 0");
+        yellowCounterLabel = new JLabel(playerOName + " (Banana): 0");
         yellowCounterLabel.setFont(new Font("Book Antiqua", Font.BOLD, 14));
         yellowCounterLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         yellowCounterLabel.setForeground(new Color(255, 222, 0));
@@ -125,6 +125,7 @@ public class ConnectFour extends JPanel {
         homeButton.setOpaque(false);
         homeButton.setContentAreaFilled(false);
         homeButton.setBorderPainted(false);
+        homeButton.setFocusPainted(false);
 
         // Add components to the info panel
         infoPanel.add(Box.createVerticalStrut(20));
@@ -174,15 +175,15 @@ public class ConnectFour extends JPanel {
     private void updateTurn(String playerXName, String playerOName) {
         if (currentState == State.PLAYING) {
             currentPlayer = (currentPlayer == Seed.CROSS) ? Seed.NOUGHT : Seed.CROSS; // Switch players
-            turnLabel.setText("Turn: " + (currentPlayer == Seed.CROSS ? playerXName + " (Red)" : playerOName + " (Yellow)"));
+            turnLabel.setText("Turn: " + (currentPlayer == Seed.CROSS ? playerXName + " (Apple)" : playerOName + " (Banana)"));
         } else if (currentState == State.CROSS_WON) {
             redWins++;
-            redCounterLabel.setText(playerXName + " (Red): " + redWins);
-            turnLabel.setText(playerXName + " (Red) Won!");
+            redCounterLabel.setText(playerXName + " (Apple): " + redWins);
+            turnLabel.setText(playerXName + " (Apple) Won!");
         } else if (currentState == State.NOUGHT_WON) {
             yellowWins++;
-            yellowCounterLabel.setText(playerOName + " (Yellow): " + yellowWins);
-            turnLabel.setText(playerOName + " (Yellow) Won!");
+            yellowCounterLabel.setText(playerOName + " (Banana): " + yellowWins);
+            turnLabel.setText(playerOName + " (Banana) Won!");
         } else if (currentState == State.DRAW) {
             turnLabel.setText("It's a Draw!");
         }
