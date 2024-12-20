@@ -20,95 +20,142 @@ public class ConnectFour extends JPanel {
     private int timeElapsed;     // Time elapsed in seconds
     private int redWins = 0;     // Number of wins for Red
     private int yellowWins = 0;  // Number of wins for Yellow
+    private JPanel layeredPane;
 
     // Constructor to initialize the game interface and state
     public ConnectFour(String playerXName, String playerOName) {
-
-        // Initialize the game board and state
         board = new Board();
         currentState = State.PLAYING;
         currentPlayer = Seed.CROSS;
 
         setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(board.getCanvasWidth() + 200, board.getCanvasHeight())); // Adjust panel size
+        setPreferredSize(new Dimension(board.getCanvasWidth() + 200, board.getCanvasHeight()));
 
-        // Create and configure the status panel
-        JPanel statusPanel = new JPanel();
-        statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.Y_AXIS));
-        statusPanel.setPreferredSize(new Dimension(200, board.getCanvasHeight()));
-        statusPanel.setBackground(new Color(255, 255, 255));
+        // Create and add panels
+        layeredPane = createBackgroundPanel();
+        JPanel boardPanel = createBoardPanel();
+        JPanel statusPanel = createStatusPanel(playerXName, playerOName);
 
-        // Initialize UI components for status panel
-        turnLabel = new JLabel("Turn: " + playerXName + " (Red)");
-        turnLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        turnLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        layeredPane.add(boardPanel, BorderLayout.CENTER);
+        layeredPane.add(statusPanel, BorderLayout.EAST);
 
-        timerLabel = new JLabel("Time: 0s");
-        timerLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        add(layeredPane, BorderLayout.CENTER);
 
-        redCounterLabel = new JLabel(playerXName + " (Red): 0");
-        redCounterLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        redCounterLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        yellowCounterLabel = new JLabel(playerOName + " (Yellow): 0");
-        yellowCounterLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        yellowCounterLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Initialize Clear All button
-        clearButton = new JButton("Clear All");
-        clearButton.setFont(new Font("Arial", Font.BOLD, 14));
-        clearButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        clearButton.addActionListener(e -> clearAll());
-
-        // Initialize Back to Home button
-        homeButton = new JButton("Back to Home");
-        homeButton.setFont(new Font("Arial", Font.BOLD, 14));
-        homeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        homeButton.addActionListener(e -> backToHome());
-
-        // Add components to the status panel
-        statusPanel.add(Box.createVerticalStrut(20));
-        statusPanel.add(turnLabel);
-        statusPanel.add(Box.createVerticalStrut(20));
-        statusPanel.add(timerLabel);
-        statusPanel.add(Box.createVerticalStrut(10));
-        statusPanel.add(redCounterLabel);
-        statusPanel.add(Box.createVerticalStrut(10));
-        statusPanel.add(yellowCounterLabel);
-        statusPanel.add(Box.createVerticalStrut(20));
-        statusPanel.add(clearButton);
-        statusPanel.add(Box.createVerticalStrut(10));
-        statusPanel.add(homeButton);
-
-        add(statusPanel, BorderLayout.EAST);
-
-        // Set up a timer to update every second
+        // Set up a timer
         timer = new Timer(1000, e -> updateTimer());
         timer.start();
 
-        // Add mouse interaction for the game board
+        // Add mouse listener for the board
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int col = e.getX() / Cell.SIZE; // Determine the column clicked
+                int col = e.getX() / Cell.SIZE;
                 if (currentState == State.PLAYING) {
                     if (col >= 0 && col < Board.COLS) {
-                        for (int row = Board.ROWS - 1; row >= 0; row--) { // Start from the bottom row
+                        for (int row = Board.ROWS - 1; row >= 0; row--) {
                             if (board.cells[row][col].content == Seed.NO_SEED) {
-                                board.cells[row][col].content = currentPlayer; // Place the player's seed
-                                currentState = board.stepGame(currentPlayer, row, col); // Check the game state
-                                updateTurn(playerXName, playerOName); // Update the turn or announce results
+                                board.cells[row][col].content = currentPlayer;
+                                currentState = board.stepGame(currentPlayer, row, col);
+                                updateTurn(playerXName, playerOName);
                                 break;
                             }
                         }
                     }
                 } else {
-                    newGame(playerXName, playerOName); // Restart the game if finished
+                    newGame(playerXName, playerOName);
                 }
-                repaint(); // Redraw the board
+                repaint();
             }
         });
+    }
+
+    private JPanel createBackgroundPanel() {
+        JPanel backgroundPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                ImageIcon icon = new ImageIcon(getClass().getResource("/image/CFBG.gif")); // Replace with your image path
+                if (icon != null) {
+                    Image img = icon.getImage();
+                    g.drawImage(img, 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
+        return backgroundPanel;
+    }
+
+    private JPanel createStatusPanel(String playerXName, String playerOName) {
+        JPanel statusPanel = new JPanel(new BorderLayout());
+        statusPanel.setPreferredSize(new Dimension(200, board.getCanvasHeight()));
+
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        statusPanel.setOpaque(false);
+
+        // Initialize labels and buttons
+        turnLabel = new JLabel("Turn: " + playerXName + " (Red)");
+        turnLabel.setFont(new Font("Book Antiqua", Font.BOLD, 20));
+        turnLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        turnLabel.setForeground(new Color(0, 0, 0));
+
+        timerLabel = new JLabel("Time: 0s");
+        timerLabel.setFont(new Font("Book Antiqua", Font.PLAIN, 20));
+        timerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        timerLabel.setForeground(new Color(0, 0, 0));
+
+        redCounterLabel = new JLabel(playerXName + " (Red): 0");
+        redCounterLabel.setFont(new Font("Book Antiqua", Font.BOLD, 14));
+        redCounterLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        redCounterLabel.setForeground(new Color(255, 0, 0));
+
+        yellowCounterLabel = new JLabel(playerOName + " (Yellow): 0");
+        yellowCounterLabel.setFont(new Font("Book Antiqua", Font.BOLD, 14));
+        yellowCounterLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        yellowCounterLabel.setForeground(new Color(255, 222, 0));
+
+        clearButton = new JButton("Reset");
+        clearButton.setFont(new Font("Book Antiqua", Font.BOLD, 14));
+        clearButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        clearButton.addActionListener(e -> clearAll());
+
+        homeButton = new JButton("Home");
+        homeButton.setFont(new Font("Book Antiqua", Font.BOLD, 14));
+        homeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        homeButton.addActionListener(e -> backToHome());
+
+        // Add components to the info panel
+        infoPanel.add(Box.createVerticalStrut(20));
+        infoPanel.add(turnLabel);
+        infoPanel.add(Box.createVerticalStrut(8));
+        infoPanel.add(timerLabel);
+        infoPanel.add(Box.createVerticalStrut(8));
+        infoPanel.add(redCounterLabel);
+        infoPanel.add(Box.createVerticalStrut(10));
+        infoPanel.add(yellowCounterLabel);
+        infoPanel.add(Box.createVerticalStrut(20));
+        infoPanel.add(clearButton);
+        infoPanel.add(Box.createVerticalStrut(20));
+        infoPanel.add(homeButton);
+
+        infoPanel.setOpaque(false);
+
+        // Add components to the status panel
+        statusPanel.add(infoPanel, BorderLayout.CENTER);
+
+        return statusPanel;
+    }
+
+    private JPanel createBoardPanel() {
+        JPanel boardPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                board.paint(g); // Draw the board
+            }
+        };
+        boardPanel.setOpaque(false);
+        boardPanel.setPreferredSize(new Dimension(board.getCanvasWidth(), board.getCanvasHeight()));
+        return boardPanel;
     }
 
     @Override
@@ -158,6 +205,7 @@ public class ConnectFour extends JPanel {
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         if (parentFrame != null) {
             parentFrame.dispose();
+            new ScreenAwal();
         }
     }
 
