@@ -96,7 +96,7 @@ public class TicTacToeVs extends JFrame {
         setVisible(false);
 
         // Memulai permainan Tic Tac Toe
-        System.out.println("Tic Tac Toe (VS AI) game started!");
+        new LevelTTTAi();
     }
 
     private void playersclicked() {

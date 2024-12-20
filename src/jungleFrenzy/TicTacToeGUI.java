@@ -143,7 +143,7 @@ public class TicTacToeGUI extends JFrame {
         backButton.setForeground(Color.BLACK); // Warna teks tombol menjadi hitam
         backButton.addActionListener(e -> {
             dispose();
-            new StartPage(); // Pastikan StartPage() ada dalam proyek
+            new ScreenAwal(); // Pastikan StartPage() ada dalam proyek
         });
 
         JPanel leftTopPanel = new JPanel();

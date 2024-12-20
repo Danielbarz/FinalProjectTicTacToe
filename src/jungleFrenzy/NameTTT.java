@@ -117,12 +117,11 @@ public class NameTTT extends JFrame {
         }
 
         // Memulai permainan dengan nama pemain
-        System.out.println("Player 1: " + player1Name);
-        System.out.println("Player 2: " + player2Name);
         setVisible(false);
 
         // Panggil layar permainan di sini
         // new GameScreen(player1Name, player2Name);
+        new LevelTTT();
     }
 
 }
