@@ -13,9 +13,9 @@ public class Cell {
 
     // Define properties (package-visible)
     /** Content of this cell (Seed.EMPTY, Seed.CROSS, or Seed.NOUGHT) */
-    Seed content;
+    public Seed content;
     /** Row and column of this cell */
-    int row, col;
+    public int row, col;
 
     /** Constructor to initialize this cell with the specified row and col */
     public Cell(int row, int col) {
@@ -30,12 +30,16 @@ public class Cell {
     }
 
     /** Paint itself on the graphics canvas, given the Graphics context */
-    public void paint(Graphics g) {
-        // Draw the Seed if it is not empty
-        int x1 = col * SIZE + PADDING;
-        int y1 = row * SIZE + PADDING;
+    public void paint(Graphics g, int x, int y, int size) {
+        g.setColor(Color.WHITE);
+        g.fillRect(x, y, size, size);
+        g.setColor(Color.BLACK);
+        g.drawRect(x, y, size, size);
         if (content == Seed.CROSS || content == Seed.NOUGHT) {
-            g.drawImage(content.getImage(), x1, y1, SEED_SIZE, SEED_SIZE, null);
+            // Draw content centered in the cell
+            int padding = size / 5;
+            int seedSize = size - 2 * padding;
+            g.drawImage(content.getImage(), x + padding, y + padding, seedSize, seedSize, null);
         }
     }
 }

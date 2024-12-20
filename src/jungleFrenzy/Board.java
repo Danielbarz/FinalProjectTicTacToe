@@ -10,8 +10,9 @@ public class Board {
     public static final int ROWS = 6;  // ROWS x COLS cells
     public static final int COLS = 7;
     // Define named constants for drawing
-    public static final int CANVAS_WIDTH = Cell.SIZE * COLS;  // the drawing canvas
-    public static final int CANVAS_HEIGHT = Cell.SIZE * ROWS;
+    private int canvasWidth; // Dynamic width
+    private int canvasHeight; // Dynamic height
+    private int cellSize; // Dynamic cell size
     public static final int GRID_WIDTH = 8;  // Grid-line's width
     public static final int GRID_WIDTH_HALF = GRID_WIDTH / 2; // Grid-line's half-width
     public static final Color COLOR_GRID = Color.LIGHT_GRAY;  // grid lines
@@ -24,6 +25,12 @@ public class Board {
     /** Constructor to initialize the game board */
     public Board() {
         initGame();
+        cells = new Cell[ROWS][COLS];
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                cells[row][col] = new Cell(row, col);
+            }
+        }
     }
 
     /** Initialize the game objects (run once) */
@@ -116,26 +123,29 @@ public class Board {
         }
     }
 
+    public void updateDimensions(int width, int height) {
+        canvasWidth = width;
+        canvasHeight = height;
+        cellSize = Math.min(canvasWidth / COLS, canvasHeight / ROWS);
+    }
+
+    // Getter methods for canvas dimensions
+    public int getCanvasWidth() {
+        return canvasWidth;
+    }
+
+    public int getCanvasHeight() {
+        return canvasHeight;
+    }
+
     /** Paint itself on the graphics canvas, given the Graphics context */
     public void paint(Graphics g) {
-        // Draw the grid-lines
-        g.setColor(COLOR_GRID);
-        for (int row = 1; row < ROWS; ++row) {
-            g.fillRoundRect(0, Cell.SIZE * row - GRID_WIDTH_HALF,
-                    CANVAS_WIDTH - 1, GRID_WIDTH,
-                    GRID_WIDTH, GRID_WIDTH);
-        }
-        for (int col = 1; col < COLS; ++col) {
-            g.fillRoundRect(Cell.SIZE * col - GRID_WIDTH_HALF, 0 + Y_OFFSET,
-                    GRID_WIDTH, CANVAS_HEIGHT - 1,
-                    GRID_WIDTH, GRID_WIDTH);
-        }
-
-        // Draw all the cells
-        for (int row = 0; row < ROWS; ++row) {
-            for (int col = 0; col < COLS; ++col) {
-                cells[row][col].paint(g);  // ask the cell to paint itself
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
+                cells[row][col].paint(g, col * cellSize, row * cellSize, cellSize);
             }
         }
     }
+
+
 }
